@@ -1,5 +1,6 @@
 package com.example.mma.imagedetector;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -23,6 +24,7 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -31,10 +33,12 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.nio.ByteBuffer;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -44,10 +48,15 @@ public class MainActivity extends AppCompatActivity {
     Button buttonUpload;
     ImageView imageView;
 
+    EditText editTextIP;
+    EditText editTextPort;
+
     static final int REQUEST_IMAGE_CAPTURE = 1;
     static final int REQUEST_TAKE_PHOTO = 1;
 
     String mCurrentPhotoPath;
+
+    ProgressDialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,14 +74,21 @@ public class MainActivity extends AppCompatActivity {
 
                 if (connectionAvailable()) {
 
-                    new sendToServer().execute();
+                    //dialog =  ProgressDialog.show(getApplicationContext(),"", "Uploading image to server...", true, true);
+
+                    textViewResult.setText("transaction occurring...");
+                    new sendToServer().execute(editTextIP.getText().toString(), editTextPort.getText().toString());
+                    Snackbar.make(view, "Sending data...", Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show();
+
+
 
                 } else {
                     textViewResult.setText("no network available");
+                    return;
                 }
 
-                Snackbar.make(view, "Sending data...", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+
             }
         });
 
@@ -80,6 +96,10 @@ public class MainActivity extends AppCompatActivity {
         textViewResult = (TextView) findViewById(R.id.textViewResult);
         buttonUpload = (Button) findViewById(R.id.buttonUpload);
         imageView = (ImageView) findViewById(R.id.imageView);
+
+        editTextIP = (EditText) findViewById(R.id.editTextIP);
+        editTextPort = (EditText) findViewById(R.id.editTextPort);
+
 
     }
 
@@ -145,17 +165,18 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private class sendToServer extends AsyncTask<Void, Void, String> {
+    private class sendToServer extends AsyncTask<String, Void, String> {
         @Override
-        protected String doInBackground(Void... params) {
+        protected String doInBackground(String... params) {
 
-            if (mCurrentPhotoPath == null){
-                return "no Photo captured";
-            }
+//            if (mCurrentPhotoPath == null){
+//
+//                return "no Photo captured";
+//            }
 
             String result = "Not started.";
-            String hostName = "192.168.8.100";
-            int portNumber = 10000;
+            final String hostName = params[0];
+            int portNumber = Integer.parseInt(params[1]);
 
 
             Socket clientSocket = null;
@@ -163,19 +184,66 @@ public class MainActivity extends AppCompatActivity {
             // params comes from the execute() call: params[0] is the url.
             try {
 
+                //System.setProperty("http.keepAlive", "false");
+
                 clientSocket = new Socket(hostName, portNumber);
                 PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
                 BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
                 //out.println("Android robot talking!");
 
-                out.println(b64string());
+                //out.println(b64string());
 
-                result = "done sending message!";
+
+                //out.print(b64string());
+
+
+                FileInputStream inFile = null;
+               // FileOutputStream outFile = null;
+
+                try {
+                    inFile = new FileInputStream(mCurrentPhotoPath.replace("file:",""));
+//                    outFile = new FileOutputStream("outagain.txt");
+                    int c;
+
+                    while ((c = inFile.read()) != -1) {
+                        out.write(c);
+                        //System.out.println(c);
+
+                    }
+                } finally {
+                    if (inFile != null) {
+                        inFile.close();
+                    }
+                    if (out != null) {
+                        out.close();
+                    }
+
+
+                }
+
+
+
+
+
+                //result = "done sending message!";
 
                 String receivedMessage = null;
 
-                receivedMessage = in.readLine();
+                String inputLine;
+
+                
+
+                while ((inputLine = in.readLine()) != null) {
+                    //System.out.println(inputLine);
+                    receivedMessage += inputLine;
+
+                }
+
+
                 result = receivedMessage;
+
+                in.close();
+                clientSocket.close();
 
 //                do {
 //                    receivedMessage = in.readLine();
@@ -186,14 +254,25 @@ public class MainActivity extends AppCompatActivity {
 
 
             } catch (IOException e) {
+                e.printStackTrace();
                 result = "Failed to send...";
+
+
+
             }
+
+
+
+
+
 
             return result;
         }
         // onPostExecute displays the results of the AsyncTask.
         @Override
         protected void onPostExecute(final String result) {
+
+            //dialog.dismiss();
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -292,9 +371,35 @@ public class MainActivity extends AppCompatActivity {
     String b64string(){
 
         // get the base 64 string
-        String imgString = Base64.encodeToString(getBytesFromBitmap(), Base64.NO_WRAP);
-        Log.v("base 64", imgString);
-        return imgString;
+
+//        String imgString = Base64.encodeToString(getBytesFromBitmap(), Base64.NO_WRAP);
+//
+//        Log.v("base 64", imgString);
+//        return imgString;
+
+
+        String finalPath = mCurrentPhotoPath.replace("file:","");
+
+        BitmapFactory.Options options = new BitmapFactory.Options();
+
+        options.inSampleSize = 4;
+
+        Bitmap bm = BitmapFactory.decodeFile(finalPath,options);
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+
+        bm.compress(Bitmap.CompressFormat.JPEG,40,baos);
+
+        // bitmap object
+
+
+        //byteImage_photo = baos.toByteArray();
+
+        //generate base64 string of image
+
+        //String encodedImage =Base64.encodeToString(baos.toByteArray(),Base64.DEFAULT);
+        //Log.v("IMAGE DETECTOR", encodedImage);
+        return Base64.encodeToString(baos.toByteArray(),Base64.DEFAULT);
 
     }
 
