@@ -93,6 +93,7 @@ public class MainActivity extends AppCompatActivity {
     ProgressDialog dialog;
 
     String result;
+    FloatingActionButton fab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,7 +102,7 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab = (FloatingActionButton) findViewById(R.id.fab);
 
         card = (CardView) findViewById(R.id.Card);
         cardImage = (ImageView) findViewById(R.id.cardImage);
@@ -154,7 +155,7 @@ public class MainActivity extends AppCompatActivity {
 
                     new sendToServer().execute(editTextIP.getText().toString(), editTextPort.getText().toString());
 
-                    Snackbar.make(view, "Sending data...", Snackbar.LENGTH_LONG)
+                    Snackbar.make(findViewById(R.id.clayout), "Sending data...", Snackbar.LENGTH_LONG)
                             .setAction("Action", null).show();
 
 
@@ -455,7 +456,7 @@ public class MainActivity extends AppCompatActivity {
                         cardText.setText(result);
                         card.setVisibility(View.VISIBLE);
 
-                        Snackbar.make(findViewById(android.R.id.content), "Received result", Snackbar.LENGTH_LONG)
+                        Snackbar.make(fab , "Received result", Snackbar.LENGTH_LONG)
                                 .setAction("Clear", new View.OnClickListener() {
                                     @Override
                                     public void onClick(View v) {
@@ -595,7 +596,10 @@ public class MainActivity extends AppCompatActivity {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                Snackbar.make(findViewById(android.R.id.content), "Ready to send picture", Snackbar.LENGTH_SHORT)
+//                Snackbar.make(findViewById(android.R.id.content), "Ready to send picture", Snackbar.LENGTH_SHORT)
+//                        .show();
+
+                Snackbar.make(fab, "Ready to send picture", Snackbar.LENGTH_SHORT)
                         .show();
             }
         });
