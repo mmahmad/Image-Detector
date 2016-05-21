@@ -69,15 +69,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/editTextPort"
-        android:id="@+id/Card"
-
-        >
+        android:id="@+id/Card">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:paddingTop="20dp">
+            android:paddingTop="20dp"
+            android:paddingBottom="20dp">
 
             <TextView
                 android:id="@+id/textViewCardText"
@@ -85,7 +84,7 @@
                 android:layout_height="match_parent"
                 android:text="dffdf"
                 android:gravity="center"
-                android:textSize="23dp"
+                android:textSize="23sp"
                 android:textColor="@color/colorPrimary"
 
                  />
@@ -94,7 +93,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:src="@drawable/deer"
-                android:paddingTop="40dp"
+                android:paddingTop="15dp"
+                android:gravity="center"
                 android:id="@+id/cardImage"
                 android:contentDescription="deer image"/>
 
