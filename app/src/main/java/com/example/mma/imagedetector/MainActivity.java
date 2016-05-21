@@ -155,7 +155,7 @@ public class MainActivity extends AppCompatActivity {
 
                     new sendToServer().execute(editTextIP.getText().toString(), editTextPort.getText().toString());
 
-                    Snackbar.make(findViewById(R.id.clayout), "Sending data...", Snackbar.LENGTH_LONG)
+                    Snackbar.make(fab, "Sending data...", Snackbar.LENGTH_LONG)
                             .setAction("Action", null).show();
 
 
