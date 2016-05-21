@@ -51,8 +51,7 @@
         android:ems="10"
         android:id="@+id/editTextIP"
         android:layout_alignParentStart="true"
-        android:hint="IP"
-        android:text="192.168.8.100" />
+        android:hint="IP"/>
 
     <EditText
         android:layout_width="wrap_content"
@@ -62,8 +61,7 @@
         android:id="@+id/editTextPort"
         android:layout_below="@+id/editTextIP"
         android:layout_alignParentStart="true"
-        android:hint="Port"
-        android:text="10000" />
+        android:hint="Port"/>
 
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
