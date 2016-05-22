@@ -1,5 +1,8 @@
 package com.example.mma.imagedetector;
 
+
+import android.support.annotation.NonNull;
+
 import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.ContentUris;
@@ -7,11 +10,9 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.content.res.ColorStateList;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.media.Image;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -19,22 +20,17 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
-import android.provider.ContactsContract;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.provider.Settings;
-import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.media.VolumeProviderCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.ButtonBarLayout;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
-import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.view.Menu;
@@ -43,28 +39,17 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.io.PrintWriter;
-import java.net.ConnectException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.nio.ByteBuffer;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Hashtable;
-import java.util.Map;
-
 
 public class MainActivity extends AppCompatActivity {
 
@@ -86,7 +71,6 @@ public class MainActivity extends AppCompatActivity {
     CardView card;
     ImageView cardImage;
     TextView cardText;
-    //ImageView imageView1;
 
     private String KEY_IMAGE = "image";
     private String KEY_NAME = "name";
@@ -111,13 +95,9 @@ public class MainActivity extends AppCompatActivity {
         editTextIP = (EditText) findViewById(R.id.editTextIP);
         editTextPort = (EditText) findViewById(R.id.editTextPort);
 
-        //card.animate();
         card.setVisibility(View.GONE);
         card.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-
-//                cardText.setText("Dog");
-//                cardImage.setImageResource(R.drawable.dog);
 
                 if (result != null && result != "") {
 
@@ -143,22 +123,11 @@ public class MainActivity extends AppCompatActivity {
                     return;
                 }
 
-                if (editTextIP.getText().toString().contentEquals("") || editTextPort.getText().toString().contentEquals("")){
+                if (editTextIP.getText().toString().contentEquals("") || editTextPort.getText().toString().contentEquals("")) {
 
                     printEmptyFieldsError();
                     return;
                 }
-
-// else if (result != null && result != ""){
-//
-//                    card.setVisibility(View.GONE);
-//                    result = "";
-//                    Snackbar.make(findViewById(android.R.id.content), "Once more please", Snackbar.LENGTH_SHORT)
-//                            .show();
-//
-//
-//                }
-
 
                 if (connectionAvailable()) {
 
@@ -176,14 +145,6 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-
-
-        //textViewResult = (TextView) findViewById(R.id.textViewResult);
-        //buttonUpload = (Button) findViewById(R.id.buttonUpload);
-        //imageView = (ImageView) findViewById(R.id.imageView);
-
-
-
 
     }
 
@@ -213,19 +174,11 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-//    public void uploadOnClick(View view) {
-//
-//        if (connectionAvailable()){
-//
-//            new sendToServer().execute();
-//
-//        } else {
-//            textViewResult.setText("no network available");
-//        }
-//
-//    }
-
-
+    /*
+    *
+    * Implement the functionality of when the camera is selected as the source of the photo
+    *
+    * */
     public void cameraUpload() {
 
 
@@ -279,8 +232,6 @@ public class MainActivity extends AppCompatActivity {
 
             }
 
-            //this.pd.show();
-
         }
 
 
@@ -315,11 +266,11 @@ public class MainActivity extends AppCompatActivity {
                 int countData = 16384;
                 int times = 0;
 
-
-                Log.d("Error#", "1");
-                Log.d("iteratorS", String.valueOf(iteratorS));
-
-                Log.d("loop", String.valueOf(times));
+//
+//                Log.d("Error#", "1");
+//                Log.d("iteratorS", String.valueOf(iteratorS));
+//
+//                Log.d("loop", String.valueOf(times));
 
 
                 Socket socket = new Socket(hostName, portNumber);
@@ -329,10 +280,10 @@ public class MainActivity extends AppCompatActivity {
                 while (true) {
                     iteratorS += countData;
                     times++;
-                    Log.d("Error#", "1");
-                    Log.d("iteratorS", String.valueOf(iteratorS));
-
-                    Log.d("loop", String.valueOf(times));
+//                    Log.d("Error#", "1");
+//                    Log.d("iteratorS", String.valueOf(iteratorS));
+//
+//                    Log.d("loop", String.valueOf(times));
 
 
                     if ((iteratorS >= lengthString)) {
@@ -349,8 +300,8 @@ public class MainActivity extends AppCompatActivity {
 
                     if (endTransmission == true) {
                         oute.flush();
-                        Log.d("Wrote ", "End");
-                        Log.d("byte length", lenByteArray);
+//                        Log.d("Wrote ", "End");
+//                        Log.d("byte length", lenByteArray);
                         oute.close();
 
                         break;
@@ -391,21 +342,6 @@ public class MainActivity extends AppCompatActivity {
 
             }
 
-
-//            } catch (Exception ex) {
-//
-//                ex.printStackTrace();
-//                if (ex.getCause() == NullPointerException){
-//
-//                }
-//
-//                if (ex.getClass().getName() == "ConnectException"){
-//
-//                }
-//
-//            }
-
-
             return result;
         }
 
@@ -420,10 +356,9 @@ public class MainActivity extends AppCompatActivity {
 
                         result = receivedResult.substring(0, 1).toUpperCase() + receivedResult.substring(1, receivedResult.length()).toLowerCase();
 
-                        //textViewResult.setText(result);
                         pd.dismiss();
 
-                        switch (result) {
+                        switch (result) { // Based on the received string, decide what picture to show.
 
                             case "Bird":
                                 cardImage.setImageResource(R.drawable.bird);
@@ -464,7 +399,7 @@ public class MainActivity extends AppCompatActivity {
                         cardText.setText(result);
                         card.setVisibility(View.VISIBLE);
 
-                        Snackbar.make(fab , "Received result", Snackbar.LENGTH_LONG)
+                        Snackbar.make(fab, "Received result", Snackbar.LENGTH_LONG)
                                 .setAction("Clear", new View.OnClickListener() {
                                     @Override
                                     public void onClick(View v) {
@@ -485,6 +420,11 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    /*
+    *
+    * Implements the functionality of when "gallery" is selected as the source of the photo
+    *
+    * */
     public void galleryUpload() {
 
         // get permissions
@@ -555,7 +495,7 @@ public class MainActivity extends AppCompatActivity {
         if (grantResults.length != 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             Log.d("IMAGE DETECTOR", "EXTERNAL STORAGE permission granted - initialize the camera source");
 
-            // work
+            // Permission granted already, so continue work...
             Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
             photoPickerIntent.setType("image/*");
             startActivityForResult(photoPickerIntent, SELECT_PHOTO);
@@ -604,16 +544,12 @@ public class MainActivity extends AppCompatActivity {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-//                Snackbar.make(findViewById(android.R.id.content), "Ready to send picture", Snackbar.LENGTH_SHORT)
-//                        .show();
 
                 Snackbar.make(fab, "Ready to send picture", Snackbar.LENGTH_SHORT)
                         .show();
             }
         });
 
-//        Snackbar.make(findViewById(android.R.id.content), "Ready to send picture", Snackbar.LENGTH_LONG)
-//                .show();
     }
 
     private File createImageFile() throws IOException {
@@ -690,7 +626,7 @@ public class MainActivity extends AppCompatActivity {
                         .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                //startActivity(new Intent(Settings.ACTION_WIFI_SETTINGS));
+                                // Do nothing
                             }
                         }).create();
                 alertDialog.show();
@@ -701,7 +637,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
+    /* *
+    *
+    * This function returns the absolute path of the image file chosen from the gallery.
+    *
+    * */
     public static String getPath(final Context context, final Uri uri) {
         final boolean isKitKatOrAbove = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT;
 
@@ -839,7 +779,6 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
-
 
 
 }
