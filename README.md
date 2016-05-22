@@ -21,3 +21,4 @@ The UI is basic, and requires the user to perform 2 basic steps:
 
 Error handling is built-in, with proper messages to describe the problems, if faced, such as no connection, failure to connect to the server, no photo selected, etc.
 
+A basic python server "python_server.py" is also provided to test. The server, by default, runs on port 10000. It received the image sent from the Android app, and returns a simple message. 
