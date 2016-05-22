@@ -108,6 +108,9 @@ public class MainActivity extends AppCompatActivity {
         cardImage = (ImageView) findViewById(R.id.cardImage);
         cardText = (TextView) findViewById(R.id.textViewCardText);
 
+        editTextIP = (EditText) findViewById(R.id.editTextIP);
+        editTextPort = (EditText) findViewById(R.id.editTextPort);
+
         //card.animate();
         card.setVisibility(View.GONE);
         card.setOnClickListener(new View.OnClickListener() {
@@ -137,6 +140,12 @@ public class MainActivity extends AppCompatActivity {
 
                     selectSourceDialog();
 
+                    return;
+                }
+
+                if (editTextIP.getText().toString().contentEquals("") || editTextPort.getText().toString().contentEquals("")){
+
+                    printEmptyFieldsError();
                     return;
                 }
 
@@ -173,8 +182,7 @@ public class MainActivity extends AppCompatActivity {
         //buttonUpload = (Button) findViewById(R.id.buttonUpload);
         //imageView = (ImageView) findViewById(R.id.imageView);
 
-        editTextIP = (EditText) findViewById(R.id.editTextIP);
-        editTextPort = (EditText) findViewById(R.id.editTextPort);
+
 
 
     }
@@ -635,7 +643,7 @@ public class MainActivity extends AppCompatActivity {
             public void run() {
 
                 final AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this).setTitle("Network Error")
-                        .setMessage("Connection error. Please ensure you are on host's network")
+                        .setMessage("Connection error. Please ensure you are on host's network.")
                         .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
@@ -657,7 +665,7 @@ public class MainActivity extends AppCompatActivity {
             public void run() {
 
                 final AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this).setTitle("Network Error")
-                        .setMessage("Connection error. Please ensure you are on host's network")
+                        .setMessage("Connection error. Please ensure you are on host's network.")
                         .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
@@ -670,6 +678,29 @@ public class MainActivity extends AppCompatActivity {
         });
 
     }
+
+    public void printEmptyFieldsError() {
+
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+
+                final AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this).setTitle("Empty fields")
+                        .setMessage("Please set IP/port fields.")
+                        .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                //startActivity(new Intent(Settings.ACTION_WIFI_SETTINGS));
+                            }
+                        }).create();
+                alertDialog.show();
+
+            }
+        });
+
+    }
+
+
 
     public static String getPath(final Context context, final Uri uri) {
         final boolean isKitKatOrAbove = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT;
